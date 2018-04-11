@@ -1,0 +1,106 @@
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+    <link href="vendors/vuetify.css" rel="stylesheet" type="text/css"></link>
+    <link href="styles.css" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+
+    <style>
+      #app {
+        padding: 30px;
+      }
+      .pauta {
+        position: relative;
+        border: 2px solid black;
+        padding: 10px;
+        margin: 5px;
+      }
+      .pauta .corpoPauta {
+        padding: 20px;
+      }
+      .pauta .titulo {
+        font-size: 15px;
+      }
+      .pauta .rodape {
+        text-align: center;
+      }
+      .pauta ul {
+        list-style-type: disc;
+      }
+      .pauta .participantes {
+        margin-top: 10px;
+      }
+      .pauta .data {
+        position: absolute;
+        right: 10;
+        top: 5;
+      }
+      .pauta .imprimir {
+        position: absolute;
+        right: 10;
+        bottom: 0;
+        text-decoration-line: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Exemplo de utilização de Componentes com Slots</h1>
+
+      <pauta titulo="Pauta da reunião do Comitê de Arquitetura"
+        :participantes="pessoas"
+        :data="data"
+        @solicitado-impressao="imprimir">
+        <ul>
+          <li>Foi definido o uso do Vue como próximo framework do Starter Pack</li>
+          <li>Material Design foi escolhido como conceito visual.</li>
+          <li>A biblioteca Vuetify foi escolhida. A mesma implementa a especificação do Material Design.</li>
+        </ul>
+        <ul slot="blocoParticipantes" slot-scope="props">
+          <li>{{props.participante}}</li>
+        </ul>
+        <div slot="rodape">Carimbado em 2018</div>
+      </pauta>
+
+      <pauta titulo="Pauta da reunião do Sindicato">
+        <ul>
+          <li>Não teve quorum. Reunião cancelada.</li>
+        </ul>
+        <div slot="rodape">Sem carimbo</div>
+      </pauta>
+    </div>
+
+    <script type="text/x-template" id="pauta">
+      <div class="pauta">
+        <h2>{{titulo}}</h2><span class="data">Data: {{ formatedDate }} </span>
+        <hr/>
+        <div class="corpoPauta">
+          <slot></slot>
+          <h4 class="participantes" v-if="participantes">Participantes</h4>
+          <slot
+            name="blocoParticipantes"
+            v-for="participanteVariavel in participantes"
+            :participante="participanteVariavel">
+            <!-- conteudo padrão caso não passe -->
+            <p>Assinado por: {{participanteVariavel}}</p>
+          </slot>
+        </div>
+        <div class="rodape">
+          <slot name="rodape"></slot>
+        </div>
+        <button class="imprimir" @click="solicitarImpressao">Imprimir Pauta</button>
+      </div>
+    </script>
+
+    <script src="vendors/moment.js"></script>
+    <script src="vendors/moment-pt-br.js"></script>
+    <script src="vendors/vue.js"></script>
+    <script src="index-componente-slot.js"></script>
+  </body>
+
+</html>
